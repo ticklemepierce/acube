@@ -1,0 +1,223 @@
+********************************************************************************
+***  ACube 2.5  ***  The edition of my dissapointing by your support :-(  ******
+********************************************************************************
+
+Program for searching optimal and suboptimal sequences of moves which transform
+the Cube into a solved state (even partially).
+================================================================================
+
+
+ Please note:
+--------------
+This program is not associated with or sponsored by the owner of the Rubik's
+Cube trademark. This owner is Seven Towns Ltd. (http://rubiks.com)
+The program and the source code are freeware.
+
+Please, read carefully the following text in order to use all advantages of
+the ACube program...
+If you have any questions, e-mail me.
+
+
+ About Author
+--------------
+
+This program was my university project at the Technical University Prague
+faculty of elektrotechnics, department of computer science in 2001.
+Programmed by Jelinek Josef <gloom@email.cz>
+Other information can be found at http://cube.misto.cz.
+
+The program is created in GNU C++ (EGCS). It doesn't use any
+system-dependent features.
+
+
+ Requirements
+--------------
+ - MS DOS with DPMI, Win9x, WinNT, Win2000 or an OS with C++ compiler
+ - some more memory (64MB should be enough (maybe even 32MB))
+ - interest in the cube
+
+
+ Versions and Bugs
+-------------------
+2.5 08/28/2001 The fixed version (could be bug-free now :-))
+               the serious bug when you specified 2, 3, 4 or 5
+               unoriented edges then the program did not work is fixed.
+               I cannot believe that nobody meets this bug
+               because I have not got any mail about this!!
+               Or am I developing this program only for me?
+               With that bug the program was a little useless
+               so is it useless now too or what?
+
+               Also saving of the current session and then
+               possibility to continue somewhere else
+               was been added (key-code generating)
+
+2.1 ??/??/2001 The next version
+               Solving of the incomplete cube added!!
+
+2.0 ??/??/2000 The first public version
+               Many things was added
+
+1.x ??/??/???? Simple 2-phase algorithm
+
+
+ To do
+-------
+ - Automatic generation of cube states with specified propperties
+   (for example: 'Last layer orientations' or 'Middle layer edge inserting
+   when solving the first two layers' or anything else)
+ - Adding of the Reid's optimal algorithm (I have enough memory now)
+
+
+ Introduction and the Main Purpose
+-----------------------------------
+This program tries to help you when searching for the optimal sequences
+for transforming special cube state to another state which is nearer
+to solved one. So it helps a man beeing able to solve the Cube
+step by step with the low number of turns.
+
+It also helps corner-starter cubers because it can output sequences in
+center slice-move format and it can optimize for slice-turn metrics.
+
+The program can find optimal and suboptimal sequences in one of three merics:
+- quarter-turn (only F, F', R, R',... counted as one turn)
+- face-turn (plus F2, R2,... counted as one turn)
+- slice-turn (plus R L' (or Rs), R' L (or Ls), R2 L2 (or Rs2),...
+  counted as one turn)
+
+
+ Controls
+----------
+The program is started from DOS command line. It needs the DPMI server
+(Win 9x have one in themselves) for running. Or you can compile the sources
+(eg. g++ -o ACube -O3 -s *.cpp) on another OS and run there.
+
+There are an optional command-line arguments in the program:
+
+ q   for 'quarter-turn' metrics
+ f   for 'face-turn' metrics
+ s   for 'slice-turn' metrics
+ a   for searching all solutions with the current shortest length
+ o   for searching only for optimal sequences in the given metrics
+ c   for slice-turns (Rs, Us,...)
+     eg. Rs is R L' followed by the rotation of the whole cube
+     in the opposite direction then that slice-turn so
+     only middle layer is moved as the result
+     Rs  corresponds to R L' plus cube rotation
+     Rs2 corresponds to R2 L2 plus cube rotation
+     Rs' corresponds to R' L plus cube rotation
+     ...
+
+Examples:
+
+$> ACube q a o
+ - use quarter-turn metrics and search for all optimal sequences
+
+$> Acube s c
+ - find me some nice moves and I like slice-turns so use them too
+
+$> Acube s c a o
+ - I need very short moves and I prefer slice-turns, show me all
+
+
+After the starting of the program you will be prompted to input
+a cube state that program will try to solve.
+The input is in this form:
+
+  UF UR UB UL DF DR DB DL FR FL BR BL  UFR URB UBL ULF DRF DFL DLB DBR
+
+This configuration represents the solved Cube (similar to the Reid's
+program).
+The doubles are edges and the triples are corners.
+You can also use some simplifications for incomplete cube.
+Instead of an edge or a corner you can use:
+
+ !   this cubie is in its right orientation and place
+ @!  this cubie is in its right place but has unknown orientation
+ -!  this cubie is in its right place but flipped (edge) or counter-clockwise
+     twisted
+ +!  as -! but only for corners and it is clockwise twisted
+ ?   this cubie is oriented but is not known
+ @?  this cubie is neither oriented nor known
+ -?  this cubie is flipped (edge) or counter-clockwise twisted (corner) than
+     cubie on the solved Cube in this position but is not known
+ +?  as -? but only for corners and it is clockwise twisted
+
+For orientation of the cubies is important only the first letter of the triple.
+So UFR is equivalent of URF but not of eg. FUR.
+You can also precede the double or triple by '+', '-', or '@'. It affects
+the orientation of given cubie in the known way.
+(The @ character is very useful here!)
+
+You can also use some shortcuts and commands:
+
+ !!  is the same as repeating '!' to the end of edges or corners
+ @!! is the same as repeating '@!' to the end of edges or corners
+ ??  is the same as repeating '!' to the end of edges or corners
+ @?? is the same as repeating '@!' to the end of edges or corners
+
+ Q   is the end of the program
+ K   is the input of the key-code generated on Ctrl-C key press
+ N   is a canceling of the input and restarting of the input
+
+When the program is computing a solution you can press Ctrl-C and
+key-code of the current state of a computation is printed and
+you will be prompter for another Cube.
+The key-code can be then used to restore the computation from
+the point of termination (K command).
+
+Examples:
+
+ !! !!   solved cube
+ -? -? -? -? !! !!        flip upper edges and do not care of their positions
+ ? ? ? ? !! -? -? -? ? !! twist 3 corners clockwise and leave 4 edges oriented
+                          (do not care of their positions)
+ ! ! ! ! ! ! ! ! -! -! -! -! !! flip edges of the middle layer in their places
+ ? ? ? ? !! -! -! -! !!   known 'Sune'-like state
+ ! ! ! ! @? @? @? @? !! +! ! ! ! @?? twist corner and don't care about bottom
+
+
+ Important note for orientation understanding!
+-----------------------------------------------
+A Corner is correctly oriented if its facelet with the color of the top
+or bottom cube face center is facing up or down.
+Else it is twisted (clockwise or counter-clockwise) off this possition.
+
+An edge is fliped if it is on the front resp. back face and you proceed
+F or F' resp. B or B'.
+Other situations leaves the edge in previous orientation.
+The solved cube has all corners and edges correctly oriented.
+
+Read the previous note more than once to understand it...
+
+
+ Output of Program
+-------------------
+
+The program outputs found sequences to the standart output and other
+information to the standard error output.
+
+Output is in standard cube-sequence format. Single quote means inverse and
+'2' means double turn.
+'s' means slice move and appears only if program option 'c' is specified.
+(This is true since version 2.5!)
+If center slice-turns are allowed then
+eg. Rs means that you perform R L' and then turn the whole cube in opposite
+direction than is R and L' (it is turn of the slice between R and L layers).
+
+There are lengths in the different metrics in the parentheses at the end of
+the found sequence.
+
+Asterisk indicates that sequence is surely optimal in the given metrics.
+
+
+ Credits
+---------
+
+I'd like to thank following people:
+Erno Rubik for the Cube
+Herbert Kociemba for his algorithm and programs
+Michael Reid for his programs
+David Singmaster for many other things
+and many other cubists (especially on the Yahoo Speed solving club)...
+
