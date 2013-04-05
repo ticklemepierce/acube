@@ -29,13 +29,13 @@ static char *cr_str[] = {  // corners with all orientations
 // - testing of the correctness and validity of the given configuration
 // - computing of the particular characteristics of the given cube
 // =========================================================================
-   int  Cube::init(struct options o)
+   int  Cube::init(struct options o, char* pos)
 // -------------------------------------------------------------------------
 {
   int stat;
 
   opts = o;
-  stat = enter();
+  stat = enter(pos);
   if (stat == 2) {
     if (readkey())
       return 1;
@@ -70,12 +70,12 @@ static char *cr_str[] = {  // corners with all orientations
 }
 
 // =========================================================================
-   int  Cube::enter()
+   int  Cube::enter(char *pos)
 // -------------------------------------------------------------------------
 // This is not the ideal way of the defining of the cube state
 // but I have not seen any better way for a terminal
 {
-  char es[12][10], cs[8][10];
+  char *es[12], *cs[8];
   int i, j, stat;
 
   fprintf(stderr, "\nEnter cube (this is the solved one) or Q(quit), N(new), K(key):\n");
@@ -87,10 +87,21 @@ static char *cr_str[] = {  // corners with all orientations
                   " 'UF'(='-FU') 'FU'(='-UF') '@UF'(='@FU')\n"
                   " 'UFR'(='URF') 'FRU' 'RUF' '@UFR' '-UFR' '+UFR' ...\n");
 
+  //sscanf("%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s")
+
+  char str[256];
+  strcpy(str, pos);
+
   // reading of the textual representation of the 12 edges
   for (i = 0; i < 12; i++) {
-    if (scanf("%s", es[i]) == -1)
-      return -1;
+    if (i == 0)
+      es[i] = strtok(str, " ");
+    else
+      es[i] = strtok(NULL, " ");
+
+    printf("%s ", es[i]);
+    fflush(stdout);
+
     if (strcmp(es[i], "Q") == 0 || strcmp(es[i], "q") == 0)
       return -1;
     if (strcmp(es[i], "K") == 0 || strcmp(es[i], "k") == 0)
@@ -120,8 +131,12 @@ static char *cr_str[] = {  // corners with all orientations
   }
   // reading of the textual representation of the 8 corners
   for (i = 0; i < 8; i++) {
-    if (scanf("%s", cs[i]) == -1)
-      return -1;
+
+    cs[i] = strtok(NULL, " ");
+
+    printf("%s ", cs[i]);
+    fflush(stdout);
+
     if (strcmp(cs[i], "Q") == 0 || strcmp(cs[i], "q") == 0)
       return -1;
     if (strcmp(es[i], "K") == 0 || strcmp(es[i], "k") == 0)

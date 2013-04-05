@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <signal.h>
-#include <setjmp.h>
+//#include <setjmp.h>
 #include <string.h>
 #include "sol.h"
 #include "const.h"
@@ -33,7 +33,7 @@ static char *bt_strs[] = {  // (slice) twists' names for the phase 2
   "F2", "L2", "U", "U2", "U'", "B2", "R2", "D", "D2", "D'",
   "Fs2", "Rs2", "Us", "Us2", "Ds"};
 
-static jmp_buf jump_env;
+//static jmp_buf jump_env;
 
 static void (*os)(int);
 
@@ -44,7 +44,7 @@ static void (*os)(int);
 // this is realy dangerous in C++: destructors of locals are not called
 {
   fprintf(stderr, "\n*** break ***\n");
-  longjmp(jump_env, 1);
+  //longjmp(jump_env, 1);
 }
 
 
@@ -59,7 +59,7 @@ static void (*os)(int);
 {
   int mx_d, i;
 
-  if (setjmp(jump_env) == 0) {  // break signal handling
+  // if (setjmp(jump_env) == 0) {  // break signal handling
     os = signal(SIGINT, user_interrupt);
 
     min_sol = state.min_sol; // the minimal length found
@@ -99,20 +99,20 @@ static void (*os)(int);
       else
         p1_search(i);
     }
-  }
-  else { // the break signal was been caught
-    printf("\nThe continuation key: ");
-    printf("%lu %lu %i %lu %i %i %i %i %i",
-      state.co, state.eo,
-      state.ct, state.ef, state.el, state.cp,
-      state.u_se, state.d_se, state.m_se);
-    printf(" %i %i %i", min_sol, s1[0].r_d, n1);
-    for (i = 1; i <= n1; i++)
-      printf(" %i", s1[i].tw);
-    printf("\n\n");
-  }
+  // }
+  // else { // the break signal was been caught
+  //   printf("\nThe continuation key: ");
+  //   printf("%lu %lu %i %lu %i %i %i %i %i",
+  //     state.co, state.eo,
+  //     state.ct, state.ef, state.el, state.cp,
+  //     state.u_se, state.d_se, state.m_se);
+  //   printf(" %i %i %i", min_sol, s1[0].r_d, n1);
+  //   for (i = 1; i <= n1; i++)
+  //     printf(" %i", s1[i].tw);
+  //   printf("\n\n");
+  // }
 
-  signal(SIGINT, os); // dissable the break signal handling
+  //signal(SIGINT, os); // dissable the break signal handling
   // print out some statistics
   if (opt_search) {
     fprintf(stderr, "Done. (%lu solutions found)\n", sol2);

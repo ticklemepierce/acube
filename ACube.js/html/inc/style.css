@@ -1,0 +1,97 @@
+html, body, div {
+  font-family: Helvetica;
+}
+#left, #right {
+  width: 45%;
+  position: absolute;
+}
+#left {
+  left: 5%;
+}
+#right {
+  right: 5%;
+  height: 80%;
+}
+h1 {
+  text-align: center;
+}
+input{
+  font-family: monospace;
+  font-size: 1em;
+}
+button {
+  margin: 5px;
+  font-size: 1.2em;
+}
+
+
+body {
+  margin: 0px;
+  padding: 0px;
+  background: #FFF;
+  font-family: Helvetica, Tahoma, Arial;
+}
+
+body,div {
+  margin: 0px;
+  padding: 0px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-size: 18px;
+  margin: 0px;
+  padding: 8px 12px;
+  color: #000;
+  font-weight: bold;
+  text-shadow: 2px 2px 1px #ACE;
+  border-bottom: 1px solid rgba(128, 160, 195, 0.5);
+}
+
+h1,h1 a {
+  font-size: 64px;
+  color: #FFF;
+  text-align: center;
+  text-shadow: 2px 2px 1px #88A;
+  border-bottom: none;
+  font-weight: bold;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+div.header {
+  height: 96px;
+  background: #ACE;
+  z-index: 10;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 1);
+}
+
+div.content {
+  background: #E0F0FF;
+  box-shadow: 1px 1px 8px rgba(0, 0, 0, 1);
+  margin-top: 96px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+
+div.left {
+  width: 50%;
+  height: 100%;
+  left: 0px;
+  position: absolute;
+  overflow-y: auto;
+  text-align: center;
+  
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+div.right {
+  width: 50%;
+  height: 100%;
+  right: 0px;
+  position: absolute;
+}

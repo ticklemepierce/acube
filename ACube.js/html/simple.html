@@ -1,0 +1,6 @@
+<script src="ACube.js"></script>
+<script>var solve = Module.cwrap('solve', 'void', ['string'])</script>
+
+Open the console first.
+<input id="pos" style="width: 50%" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB">
+<button onclick='solve(pos.value);'>Go!</button>

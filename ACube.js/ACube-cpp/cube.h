@@ -26,13 +26,13 @@ class Cube {
   struct CubeState state; // characteristic values of the cube state
   struct options opts;    // various options
 
-  int   enter();       // fills e*[], c*[]
+  int   enter(char *);       // fills e*[], c*[]
   int   check();       // tests e*[], c*[]
   void  preprocess();  // fills state from e*[], c*[]
   int   readkey();     // read the key code for continuation
 
  public:
-  int  init(struct options); // reading, testing and preprocessing of the cube
+  int  init(struct options, char* pos); // reading, testing and preprocessing of the cube
   void solve();              // searching of the solution
 };
 

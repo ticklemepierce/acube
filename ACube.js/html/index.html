@@ -1,0 +1,104 @@
+<html>
+<head>
+<script type="text/javascript" src="inc/gacube.js"></script>
+<link href="inc/style.css" rel="stylesheet" media="screen" type="text/css" />
+<script>
+
+var worker;
+
+// From alg.garron.us
+function escapealg(algstr){return algstr.replace(/\n/g, '%0A').replace(/-/g, '%2D').replace(/\'/g, '-').replace(/ /g, '_');}
+
+var go = function() {
+
+  worker = new Worker('ACube-worker.js');
+
+  worker.addEventListener('message', function(e) {
+
+    console.log(e.data);
+
+    var textarea = document.getElementById("result");
+    textarea.innerHTML += e.data + "\n";
+
+    var match = e.data.match(/([^\(]*) \(([^\)]*q[^\)]*f[^\)]*s)\)/)
+    if (match != null) {
+      var el = document.createElement("li");
+
+      var alg = escapealg(match[1] + " // " + match[2]);
+
+      el.innerHTML = "<a href=\"http://alg.garron.us/?alg=" + alg + "&animtype=solve\">" + match[1] + "</a> (" + match[2] + ")";
+      document.getElementById("algs").appendChild(el);
+    }
+
+    textarea.scrollTop = textarea.scrollHeight;
+  }, false);  
+}
+go();
+
+function solve(str) {
+  worker.postMessage(str); // Send data to our worker.
+}
+
+function stop() {
+  worker.terminate();
+  go();
+}
+</script>
+
+</head>
+<body>
+
+
+  <div class="header">
+    <h1 class="title">
+      <a
+        href="./">ACube.js</a>
+    </h1>
+  </div>
+
+  <div class="content">
+
+    <div class="left">
+
+
+<p>Compiled from the <a href="http://cube.misto.cz/_MAIL_/acube/acube.html">C++ source</a> of Josef Jelinek's ACube, using <a href="https://github.com/kripken/emscripten/wiki">Emscripten</a>.
+<br>
+Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.js">on GitHub</a>.</p>
+<p>Graphical frontend source: Ryan Heise, <a href="http://www.ryanheise.com/cube/gacube.html">ryanheise.com</a></p>
+
+<table style="background: black; margin: auto;">
+<tbody><tr><td align="center">
+<script type="text/javascript">displayCube();</script>
+
+<tr><td align="center">
+<div style="background: #eee; color: black; font-size: 12px;">
+<input type="radio" name="mode" onclick="mode=SWAP;" checked="">Swap
+<input type="radio" name="mode" onclick="mode=TWIST;">Twist
+<input type="radio" name="mode" onclick="mode=IGNORE_POS;">Ignore position(?)
+<input type="radio" name="mode" onclick="mode=IGNORE_ORI;">Ignore orientation(@)
+</div>
+</td></tr>
+
+<tr><td>
+<div id="acubeDiv" style="background: yellow; color: black; font-size: 12px;">UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR</div>
+</td></tr>
+</tbody></table>
+
+<script type="text/javascript">updateAll();</script>
+    </div>
+    <div class="right">
+
+<input id="pos" style="width: 100%" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB"><br>
+<button onclick='solve(acubeDiv.innerHTML);'>Solve graphical input!</button>
+<button onclick='solve(pos.value);'>Solve text box input!</button>
+<button onclick='stop();'>Stop</button>
+
+<br>
+<textarea style="width: 100%; height: 50%; font-family: monospace;" id="result">Output will go here.
+</textarea>
+<ul id="algs">
+</ul>
+
+</div>
+</body>
+</html>

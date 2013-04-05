@@ -1,0 +1,33 @@
+<input id="pos" style="width: 50%;" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB"><button onclick='solve();'>Go!</button>
+<br>
+<textarea style="width: 100%; height: 80%; font-family: monospace;" id="result">Output will go here.
+</textarea>
+
+<!--script src="ACube.js"></script-->
+<script>
+
+var worker;
+
+var go = function() {
+
+  worker = new Worker('ACube-worker.js');
+
+  worker.addEventListener('message', function(e) {
+
+    console.log(e.data);
+
+    var textarea = document.getElementById("result");
+    textarea.innerHTML += e.data + "\n";
+
+    textarea.scrollTop = textarea.scrollHeight;
+  }, false);  
+}
+go();
+
+function solve() {
+  var max = document.getElementById("pos").value;
+  worker.postMessage(max); // Send data to our worker.
+}
+
+</script>
+

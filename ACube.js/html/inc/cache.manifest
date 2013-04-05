@@ -1,0 +1,9 @@
+CACHE MANIFEST
+# Uploaded on [DATE]
+offline.html
+style.css
+gacube.js
+../ACube.js
+../ACube-worker.js
+# Most servers should serve up index.html at the document root, so the following line should be fine:
+../

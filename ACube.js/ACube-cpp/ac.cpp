@@ -77,23 +77,30 @@
   fprintf(stderr, "\n");
 }
 
+// Shared state!
+static struct options opts;
+
+extern "C" void solve(char* pos) {
+  Cube cube;
+  cube.init(opts, pos);
+  cube.solve(); // search for the solution
+}
+
+extern "C" void solve_wrap() {
+  char *pos = "UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR";
+  solve(pos);
+}
+
 // =========================================================================
-   int  main(int argc, char *argv[])
+int  main(int argc, char *argv[])
 // -------------------------------------------------------------------------
 {
-  int x;
 
-  static struct options opts;
   // creating of the new cube structure
-  Cube cube;
   // read command-line arguments to the opts structure
   options(&opts, argc, argv);
-
-  while ((x = cube.init(opts)) >= 0) { // reading of the cube state; x < 0 ... finish
-    if (x == 0) {                      // ok?
-      cube.solve(); // search for the solution
-    }
-  }
+  //go_wrap();
+  printf("Initialized.");
   return 0;
 }
 
