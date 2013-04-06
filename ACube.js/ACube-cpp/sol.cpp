@@ -23,7 +23,7 @@ static char *at_strs[] = {  // (slice) twists' names for the phase 1
   "F", "F2", "F'", "L", "L2", "L'",
   "U", "U2", "U'", "B", "B2", "B'",
   "R", "R2", "R'", "D", "D2", "D'",
-  "Fs", "Fs2", "Bs", "Rs", "Rs2", "Ls", "Us", "Us2", "Ds"};
+  "S'", "S2", "S", "M", "M2", "M'", "E", "E2", "E'"};
 
 static char *bt_str[] = {  // twists' names for the phase 2
   "F2", "L2", "U", "U2", "U'", "B2", "R2", "D", "D2", "D'",
@@ -31,7 +31,7 @@ static char *bt_str[] = {  // twists' names for the phase 2
 
 static char *bt_strs[] = {  // (slice) twists' names for the phase 2
   "F2", "L2", "U", "U2", "U'", "B2", "R2", "D", "D2", "D'",
-  "Fs2", "Rs2", "Us", "Us2", "Ds"};
+  "S2", "M2", "E", "E2", "E'"};
 
 //static jmp_buf jump_env;
 

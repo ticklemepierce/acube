@@ -56,13 +56,62 @@ var go = function() {
     }
 
     textarea.scrollTop = textarea.scrollHeight;
-  }, false);  
+  }, false);
+
+  set_all_opts();
 }
-go();
 
 function solve(str) {
   startTime = new Date().getTime();
-  worker.postMessage(str); // Send data to our worker.
+  worker.postMessage(["solve", str]); // Send data to our worker.
+}
+
+function set_opts(str) {
+  worker.postMessage(["set_opts", str]); // Send data to our worker.
+}
+
+function set_slice() {
+  if (document.getElementById("slice").checked) {
+    set_opts("c");
+  }
+  else{
+    set_opts("d");
+  }
+}
+
+function set_all() {
+  if (document.getElementById("all").checked) {
+    set_opts("a");
+  }
+  else{
+    set_opts("d");
+  }
+}
+
+function set_optimal() {
+  if (document.getElementById("optimal").checked) {
+    set_opts("o");
+  }
+  else{
+    set_opts("p");
+  }
+}
+
+function set_metric(str) {
+  
+  var metrics = document.getElementsByName("metric");
+  for (i in metrics) {
+    if (metrics[i].checked) {
+        set_opts(metrics[i].value);
+    }
+  }
+}
+
+function set_all_opts() {
+  set_slice();
+  set_all();
+  set_optimal();
+  set_metric();
 }
 
 function stop() {
@@ -70,6 +119,9 @@ function stop() {
   worker.terminate();
   go();
 }
+
+window.onload = go;
+
 </script>
 
 </head>
@@ -116,7 +168,29 @@ Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.
     <div class="right">
 
 <input id="pos" style="width: 100%" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB"><br>
-<div style="padding: 5px;"><a href="ACube.txt">Advanced Instructions</a></div>
+
+<div style="padding: 5px;">
+
+<a href="ACube.txt">Advanced Instructions</a>
+
+<input id="slice" type="checkbox" onclick='set_slice();'>
+<label for="slice">Slices</label>
+
+<input id="all" type="checkbox" onclick='set_all();'>
+<label for="all">All</label>
+
+<input id="optimal" type="checkbox" onclick='set_optimal();'>
+<label for="optimal">Optimal</label>
+
+<input type="radio" name="metric" id="f" value="f" onclick="set_metric()" checked="true"  >
+<label for="f">FTM</label>
+<input type="radio" name="metric" id="q" value="q" onclick="set_metric()">
+<label for="q">QTM</label>
+<input type="radio" name="metric" id="s" value="s" onclick="set_metric()">
+<label for="s">STM</label>
+
+</div>
+
 <button onclick='solve(acubeDiv.innerHTML);'>Solve graphical input!</button>
 <button onclick='solve(pos.value);'>Solve text box input!</button>
 <button onclick='stop();'>Stop</button>

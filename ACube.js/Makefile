@@ -3,7 +3,7 @@
 JS_OPT = -O2
 JS_MEMORY = -s TOTAL_MEMORY=67108864
 JS_USE_ASM_JS = 1
-JS_FUNCTIONS = "['_solve', '_solve_wrap', '_main']"
+JS_FUNCTIONS = "['_solve', '_solve_wrap', '_set_opts', '_main']"
 
 all: cpp js
 
@@ -22,7 +22,7 @@ js:
 run: cpp
 	./ACube
 
-serve: js
+serve:
 	cd html ; open "http://localhost:$${1:-8080}/" ; python -m SimpleHTTPServer $${1:-8080}
 
 .PHONY: clean
