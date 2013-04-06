@@ -5,6 +5,27 @@
 <script>
 
 var worker;
+var startTime = null;
+
+
+function pad(n, minLength) {
+  var str = '' + n;
+  while (str.length < minLength) {
+    str = '0' + str;
+  }
+  return str;
+}
+function prettyTime(endTime) {
+  var now = new Date().getTime();
+  var cumulative = now - startTime;
+  var str = "";
+  str += Math.floor(cumulative/1000/60);
+  str += ":";
+  str += pad(Math.floor(cumulative/1000 % 60), 2);
+  str += ".";
+  str += pad(Math.floor((cumulative % 1000) / 10), 2);
+  return str;
+}
 
 // From alg.garron.us
 function escapealg(algstr){return algstr.replace(/\n/g, '%0A').replace(/-/g, '%2D').replace(/\'/g, '-').replace(/ /g, '_');}
@@ -18,7 +39,11 @@ var go = function() {
     console.log(e.data);
 
     var textarea = document.getElementById("result");
-    textarea.innerHTML += e.data + "\n";
+    var timePrefix = "";
+    if (startTime != null) {
+      timePrefix = "[" + prettyTime() + "] ";
+    }
+    textarea.innerHTML += timePrefix + e.data + "\n";
 
     var match = e.data.match(/([^\(]*) \(([^\)]*q[^\)]*f[^\)]*s)\)/)
     if (match != null) {
@@ -36,10 +61,12 @@ var go = function() {
 go();
 
 function solve(str) {
+  startTime = new Date().getTime();
   worker.postMessage(str); // Send data to our worker.
 }
 
 function stop() {
+  startTime = null;
   worker.terminate();
   go();
 }
