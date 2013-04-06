@@ -89,7 +89,7 @@ function stop() {
 
 
 <p>Compiled from the <a href="http://cube.misto.cz/_MAIL_/acube/acube.html">C++ source</a> of Josef Jelinek's ACube, using <a href="https://github.com/kripken/emscripten/wiki">Emscripten</a>.
-<br>
+  <br>
 Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.js">on GitHub</a>.</p>
 <p>Graphical frontend source: Ryan Heise, <a href="http://www.ryanheise.com/cube/gacube.html">ryanheise.com</a></p>
 
@@ -116,6 +116,7 @@ Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.
     <div class="right">
 
 <input id="pos" style="width: 100%" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB"><br>
+<div style="padding: 5px;"><a href="ACube.txt">Advanced Instructions</a></div>
 <button onclick='solve(acubeDiv.innerHTML);'>Solve graphical input!</button>
 <button onclick='solve(pos.value);'>Solve text box input!</button>
 <button onclick='stop();'>Stop</button>

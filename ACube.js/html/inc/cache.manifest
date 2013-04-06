@@ -3,6 +3,7 @@ CACHE MANIFEST
 offline.html
 style.css
 gacube.js
+../ACube.txt
 ../ACube.js
 ../ACube-worker.js
 # Most servers should serve up index.html at the document root, so the following line should be fine:
