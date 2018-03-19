@@ -49,9 +49,15 @@ var go = function() {
     if (match != null) {
       var el = document.createElement("li");
 
+      var a = document.createElement("a");
+      a.textContent = match[1];
       var alg = escapealg(match[1] + " // " + match[2]);
+      a.href = "http://alg.cubing.net/?alg=" + alg + "&view=playback";;
+      el.appendChild(a)
 
-      el.innerHTML = "<a href=\"http://alg.garron.us/?alg=" + alg + "&animtype=solve\">" + match[1] + "</a> (" + match[2] + ")";
+      var paren = document.createTextNode(" (" + match[2] + ")");
+      el.appendChild(paren);
+
       document.getElementById("algs").appendChild(el);
     }
 
