@@ -123,7 +123,7 @@ int  main(int argc, char *argv[])
   // read command-line arguments to the opts structure
   options(&opts, argc, argv);
   //go_wrap();
-  printf("Initialized.");
+  printf("Initialized.\n");
   return 0;
 }
 

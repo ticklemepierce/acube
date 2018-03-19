@@ -482,6 +482,9 @@ static char *cr_str[] = {  // corners with all orientations
     stat = 1;
   }
 
+  printf("\n");
+  fflush(stdout);
+
   return stat;
 }
 

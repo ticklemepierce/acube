@@ -2,7 +2,8 @@
 # Javascript options.
 JS_OPT = -O2
 JS_MEMORY = -s TOTAL_MEMORY=67108864
-JS_USE_ASM_JS = 1
+# ASM_FORMAT = ASM_JS=1
+ASM_FORMAT = WASM_JS=1
 JS_FUNCTIONS = "['_solve', '_solve_wrap', '_set_opts', '_main']"
 
 all: cpp js
@@ -12,12 +13,13 @@ cpp:
 
 js:
 	emcc -Wall \
-		$(JS_OPT) -s \
-		ASM_JS=$(JS_USE_ASM_JS) \
+		$(JS_OPT) \
+		-s $(ASM_FORMAT) \
 		$(JS_MEMORY) \
 		-s EXPORTED_FUNCTIONS=$(JS_FUNCTIONS) \
+		-s EXTRA_EXPORTED_RUNTIME_METHODS='["cwrap"]' \
 		-o ./html/ACube.js \
-		./ACube-cpp/*.cpp  
+		./ACube-cpp/*.cpp
 
 run: cpp
 	./ACube
