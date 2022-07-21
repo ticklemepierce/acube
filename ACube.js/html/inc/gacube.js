@@ -8,6 +8,8 @@ var cornerFaces = [[U,F,R],[U,R,B],[U,B,L],[U,L,F],[D,R,F],[D,F,L],[D,L,B],[D,B,
 var edgeNames = ['UF','UR','UB','UL','DF','DR','DB','DL','FR','FL','BR','BL'];
 var cornerNames = ['UFR','URB','UBL','ULF','DRF','DFL','DLB','DBR'];
 
+const PIECE_WIDTH = 40;
+
 function Piece(oris, ori, pos) {
 	this.oris = oris;
 	this.ori = ori;
@@ -68,6 +70,7 @@ function FaceletView(id, oris, pos, side) {
 	this.select = function() { this.selected = true; this.update(); }
 	this.deselect = function() { this.selected = false; this.update(); }
 	this.click = function() {
+
 		var pieces = this.oris == 2 ? cube.edges : cube.corners;
 		var piece = pieces[this.pos];
 		switch (mode) {
@@ -112,7 +115,7 @@ function FaceletView(id, oris, pos, side) {
 		}
 		var piece = pieces[this.pos];
 
-		cell.style.backgroundColor = face == -1 ? 'gray' : colors[face];
+		cell.style.fill = face == -1 ? 'gray' : colors[face];
 
 		var label = '';
 		if (piece.ori == -1) label += '@';
@@ -137,17 +140,58 @@ var cube = new Cube();
 var mode = SWAP;
 var selection = null;
 
-function st(oris, pos, side) {
+const getPoints = (posOnFace, face) => {
+	const faceOffsetMap = [
+		[1, 0], // U
+		[1, 2], // D
+		[0, 1], // L
+		[2, 1], // R
+		[1, 1], // F
+		[3, 1], // B
+	];
+
+	const row = Math.floor(posOnFace / 3);
+	const col = posOnFace % 3;
+
+	console.log('row', row);
+
+	const [faceOffsetX, faceOffsetY] = faceOffsetMap[face];
+
+	const topLeftCorner = {
+		x: (faceOffsetX * 3 * PIECE_WIDTH) + (col * PIECE_WIDTH),
+		y: (faceOffsetY * 3 * PIECE_WIDTH) + (row * PIECE_WIDTH),
+	}
+
+	const firstPoint = [topLeftCorner.x, topLeftCorner.y];
+	const secondPoint = [topLeftCorner.x + PIECE_WIDTH, topLeftCorner.y];
+	const thirdPoint = [topLeftCorner.x + PIECE_WIDTH, topLeftCorner.y + + PIECE_WIDTH];
+	const fourthPoint = [topLeftCorner.x, topLeftCorner.y + + PIECE_WIDTH];
+
+	return `${firstPoint.join(' ')} ${secondPoint.join(' ')} ${thirdPoint.join(' ')} ${fourthPoint.join(' ')}`
+}
+
+ let facePieceCounterList = [0, 0, 0, 0, 0, 0];
+
+function st(oris, pos, side, notFacelet) {
+	if (facePieceCounterList[side] > 8) {
+		facePieceCounterList[side] = 0;
+	}
+
+	if (notFacelet) {
+		document.write(`<polygon class="sticker" style="fill:${colors[side]}" points="${getPoints(facePieceCounterList[side], side)}"/>`);
+		facePieceCounterList[side]++;
+		return;
+	}
+
 	facelets[faceletCount] = new FaceletView(faceletCount, oris, pos, side);
-	document.write('<td id="st'+faceletCount+'" width="40" height="40" align="center" valign="center" style="cursor: pointer; cursor: hand;" onclick="facelets['+faceletCount+'].click();"></td>');
+	document.write(`<polygon id="st${faceletCount}" class="sticker" style="fill:${colors[side]}" points="${getPoints(facePieceCounterList[side], side)}" onClick="facelets[${faceletCount}].click()"/>`);
+
 	faceletCount++;
+	facePieceCounterList[side]++;
 }
 function co(pos, face) { st(3, pos, face); }
 function ed(pos, face) { st(2, pos, face); }
-function ce(face) { document.write('<td width="40" height="40" bgcolor="'+colors[face]+'"></td>'); }
-function bl(count) { for (var i = 0; i < count; i++) document.write('<td></td>'); }
-function ro() { document.write('<tr>'); }
-function rc() { document.write('</tr>'); }
+function ce(face) { st(null, null, face, true) }
 
 function updateAll() {
 	var acubeDiv = document.getElementById('acubeDiv');
@@ -158,18 +202,69 @@ function updateAll() {
 }
 
 function displayCube() {
-	document.write('<table cellspacing="2" style="background: black; margin: 5px;">');
-	// top strip
-	ro();bl(3);co(2,U);ed(2,U);co(1,U);bl(6);rc();
-	ro();bl(3);ed(3,U);ce(U);ed(1,U);bl(6);rc();
-	ro();bl(3);co(3,U);ed(0,U);co(0,U);bl(6);rc();
-	// middle strip
-	ro();co(2,L);ed(3,L);co(3,L);co(3,F);ed(0,F);co(0,F);co(0,R);ed(1,R);co(1,R);co(1,B);ed(2,B);co(2,B);rc();
-	ro();ed(11,L);ce(L);ed(9,L);ed(9,F);ce(F);ed(8,F);ed(8,R);ce(R);ed(10,R);ed(10,B);ce(B);ed(11,B);rc();
-	ro();co(6,L);ed(7,L);co(5,L);co(5,F);ed(4,F);co(4,F);co(4,R);ed(5,R);co(7,R);co(7,B);ed(6,B);co(6,B);rc();
-	// bottom strip
-	ro();bl(3);co(5,D);ed(4,D);co(4,D);bl(6);rc();
-	ro();bl(3);ed(7,D);ce(D);ed(5,D);bl(6);rc();
-	ro();bl(3);co(6,D);ed(6,D);co(7,D);bl(6);rc();
-	document.write('</table>');
+	document.write('<svg id="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">');
+	document.write('<style type="text/css">.sticker{stroke:#000;stroke-width:1px}</style>');
+
+	co(2,U);
+	ed(2,U);
+	co(1,U);
+	
+	ed(3,U);
+	ce(U);
+	ed(1,U);
+	
+	co(3,U);
+	ed(0,U);
+	co(0,U);
+	
+	co(2,L);
+	ed(3,L);
+	co(3,L);
+	co(3,F);
+	ed(0,F);
+	co(0,F);
+	co(0,R);
+	ed(1,R);
+	co(1,R);
+	co(1,B);
+	ed(2,B);
+	co(2,B);
+
+	ed(11,L);
+	ce(L);
+	ed(9,L);
+	ed(9,F);
+	ce(F);
+	ed(8,F);
+	ed(8,R);
+	ce(R);
+	ed(10,R);
+	ed(10,B);
+	ce(B);
+	ed(11,B);
+
+	co(6,L);
+	ed(7,L);
+	co(5,L);
+	co(5,F);
+	ed(4,F);
+	co(4,F);
+	co(4,R);
+	ed(5,R);
+	co(7,R);
+	co(7,B);
+	ed(6,B);
+	co(6,B);
+	
+	co(5,D);
+	ed(4,D);
+	co(4,D);
+	ed(7,D);
+	ce(D);
+	ed(5,D);
+	co(6,D);
+	ed(6,D);
+	co(7,D);
+	
+	document.write('</svg>');
 }
