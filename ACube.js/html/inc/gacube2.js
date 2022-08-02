@@ -109,8 +109,6 @@ const SVG = `
   </g>
 </svg>`;
 
-// oris = piece type
-
 // can't actually make an enum
 const typeEnum = {
   CENTERS: 3,
@@ -120,50 +118,90 @@ const typeEnum = {
 var SWAP=0,TWIST=1,IGNORE_POS=2,IGNORE_ORI=3;
 
 function Cube() {
-  this.selectedPiece = null;
+  this.selectedFacelet = null;
 
-  this.pieces = {}
+  this.edges = {};
+  this.corners = {};
+
+  this.getPiece = function(facelet) {
+    if (facelet.type === 'EDGES') {
+      return Object.values(this.edges).find(value =>
+        Object.values(value).find(val => val === facelet
+      ));
+    }
+  }
+
+  this.swapFacelets = function (facelet1, facelet2) {
+    const facelet1Elem = document.getElementById(facelet1.id);
+    const facelet2Elem = document.getElementById(facelet2.id);
+
+    const temp = facelet1Elem.getAttribute('transform');
+    facelet1Elem.setAttribute('transform', facelet2Elem.getAttribute('transform'));
+    facelet2Elem.setAttribute('transform', temp);
+  }
+
+  this.swapEdges = function(facelet1, facelet2) {
+    const piece1 = this.getPiece(facelet1);
+    const piece2 = this.getPiece(facelet2);
+
+    if (piece1 === piece2) {
+      return;
+    }
+
+    this.swapFacelets(facelet1, facelet2);
+
+    const otherFacelets = {
+      p1: Object.values(piece1).find(v => v.id !== facelet1.id), // .find since there should only be one for edges
+      p2: Object.values(piece2).find(v => v.id !== facelet2.id), // .find since there should only be one for edges
+    }
+
+    this.swapFacelets(otherFacelets.p1, otherFacelets.p2)
+  }
+
+  this.swap = function(type, facelet1, facelet2) {
+    if (type === 'EDGES') {
+      this.swapEdges(facelet1, facelet2);
+    }
+  }
 }
 
 const cube = new Cube ();
 
-// TODO determine if face is needed 
-function Piece(id, type, orientation, position) {
+window.getCubePieces = () => {
+  console.log("EDGES");
+  console.log(cube.edges);
+  console.log("CORNERS");
+  console.log(cube.corners);
+}
+
+function Facelet(id, type, orientation) {
   this.id = id;
 	this.type = type;
 	this.orientation = orientation;
-	this.homePosition = position;
-
-  console.log(this);
-  // this.face = face;
 
 	this.twist = function() { 
     this.orientation = (this.orientation + 1 + typeEnum[this.type]) % typeEnum[this.type]; 
   }
 
   this.deselect = function () {
-    cube.selectedPiece = null;
-    // TODO fix id
+    cube.selectedFacelet = null;
     document.getElementById(id).style.opacity = null;
-    // this.update();
   }
 
   this.select = function () {
-    cube.selectedPiece = this;
-    // TODO fix id
+    cube.selectedFacelet = this;
     document.getElementById(id).style.opacity = 0.7;
-    // this.update();
   }
 
   this.click = function() {
     const mode = SWAP;
     switch (mode) {
 			case SWAP:
-				if (cube.selectedPiece) {
-					if (cube.selectedPiece.type == this.type) {
-						cube.swap(this.oris, cube.selectedPiece.position, this.position);
+				if (cube.selectedFacelet) {
+					if (cube.selectedFacelet.type == this.type) {
+						cube.swap(this.type, cube.selectedFacelet, this);
 						
-            cube.selectedPiece.deselect();
+            cube.selectedFacelet.deselect();
 					}
 				}
 				else {
@@ -185,20 +223,7 @@ function Piece(id, type, orientation, position) {
 				break;
 		}
   }
-
-  // this.update = function() {
-	// 	if (this.oris == 2) {
-	// 		face = cube.getEdgeFace(this.pos, this.side);
-	// 		pieces = cube.edges;
-	// 	} else {
-	// 		face = cube.getCornerFace(this.pos, this.side);
-	// 		pieces = cube.corners;
-	// 	}
-	// }
 }
-
-
-
 
 // TODO take puzzle param
 const displayCube = () => {
@@ -206,17 +231,16 @@ const displayCube = () => {
 
   const puzzle = document.getElementById('puzzle');
   Array.from(puzzle.children).forEach(element => {
+    // ignoring position until needed
     const [type, position, orientation] = element.id.split('-');
     if (type === 'CENTERS') {
       return;
     }
-    const piece = new Piece(element.id, type, orientation, position);
-    cube.pieces[piece.id] = piece;
-    element.onclick = () => piece.click();
-    // console.log(element.id)
+    const facelet = new Facelet(element.id, type, orientation);
+    cube[type.toLowerCase()][position] = {
+      ...cube[type.toLowerCase()][position],
+      [orientation]: facelet,
+    };
+    element.onclick = () => facelet.click();
   });
-}
-
-const updateAll = () => {
-
 }
