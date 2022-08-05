@@ -73,7 +73,6 @@ const PYRA_SVG = `
 </svg>
 `;
 
-
 const SVG = `
 	<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
@@ -185,46 +184,49 @@ const SVG = `
   </g>
 </svg>`;
 
-const reorder = function(arr, index){
+const reorder = function (arr, index) {
   const start = arr.slice(index);
-  const end = arr.slice(0,index);
+  const end = arr.slice(0, index);
   return start.concat(end);
-}
+};
 
-
-let SWAP=0,TWIST=1,IGNORE_POS=2,IGNORE_ORI=3;
+let SWAP = 0,
+  TWIST = 1,
+  IGNORE_POS = 2,
+  IGNORE_ORI = 3;
 let mode = SWAP;
 
 function Cube() {
   this.selectedFacelet = null;
 
-  this.getPiece = (facelet) => (
-    Object.values(this[facelet.type]).find(value =>
-      Object.values(value).find(val => val === facelet)
-  ));
-  
+  this.getPiece = (facelet) =>
+    Object.values(this[facelet.type]).find((value) =>
+      Object.values(value).find((val) => val === facelet)
+    );
 
   this.swapFacelets = function (facelet1, facelet2) {
     const facelet1Elem = document.getElementById(facelet1.id);
     const facelet2Elem = document.getElementById(facelet2.id);
 
     const temp = facelet1Elem.style.fill;
-    facelet1Elem.style.fill = facelet2Elem.style.fill
+    facelet1Elem.style.fill = facelet2Elem.style.fill;
     facelet2Elem.style.fill = temp;
-  }
+  };
 
-  this.twist = function(facelet) {
+  this.twist = function (facelet) {
     const piece = this.getPiece(facelet);
 
-    const pieceIdx = Object.values(piece).map(facelet => facelet.id).indexOf(facelet.id);
+    const pieceIdx = Object.values(piece)
+      .map((facelet) => facelet.id)
+      .indexOf(facelet.id);
 
     const pieceFacelets = reorder(Object.values(piece), pieceIdx);
 
     this.swapFacelets(pieceFacelets[0], pieceFacelets[1]);
     this.swapFacelets(pieceFacelets[0], pieceFacelets[2]);
-  }
+  };
 
-  this.swap = function(facelet1, facelet2) {
+  this.swap = function (facelet1, facelet2) {
     const piece1 = this.getPiece(facelet1);
     const piece2 = this.getPiece(facelet2);
 
@@ -232,8 +234,12 @@ function Cube() {
       return;
     }
 
-    const piece1Idx = Object.values(piece1).map(facelet => facelet.id).indexOf(facelet1.id);
-    const piece2Idx = Object.values(piece2).map(facelet => facelet.id).indexOf(facelet2.id);
+    const piece1Idx = Object.values(piece1)
+      .map((facelet) => facelet.id)
+      .indexOf(facelet1.id);
+    const piece2Idx = Object.values(piece2)
+      .map((facelet) => facelet.id)
+      .indexOf(facelet2.id);
 
     const piece1Facelets = reorder(Object.values(piece1), piece1Idx);
     const piece2Facelets = reorder(Object.values(piece2), piece2Idx);
@@ -241,63 +247,62 @@ function Cube() {
     Object.values(piece1Facelets).forEach((facelet, idx) => {
       this.swapFacelets(facelet, piece2Facelets[idx]);
     });
-  }
+  };
 }
 
-const cube = new Cube ();
+const cube = new Cube();
 
 window.getCubePieces = () => {
   console.log("EDGES");
   console.log(cube.EDGES);
   console.log("CORNERS");
   console.log(cube.CORNERS);
-}
+};
 
 function Facelet(id, type) {
   this.id = id;
-	this.type = type;
+  this.type = type;
 
   this.deselect = function () {
     cube.selectedFacelet = null;
     document.getElementById(id).style.opacity = null;
-  }
+  };
 
   this.select = function () {
     cube.selectedFacelet = this;
     document.getElementById(id).style.opacity = 0.7;
-  }
+  };
 
-  this.click = function() {
+  this.click = function () {
     switch (mode) {
-			case SWAP:
-				if (cube.selectedFacelet) {
-					if (cube.selectedFacelet.type == this.type) {
-						cube.swap(cube.selectedFacelet, this);
-						
+      case SWAP:
+        if (cube.selectedFacelet) {
+          if (cube.selectedFacelet.type == this.type) {
+            cube.swap(cube.selectedFacelet, this);
+
             cube.selectedFacelet.deselect();
-					}
-				}
-				else {
+          }
+        } else {
           this.select();
-				}
-				break;
-			case TWIST:
-				cube.twist(this);
-				break;
-			default:
-				break;
-		}
-  }
+        }
+        break;
+      case TWIST:
+        cube.twist(this);
+        break;
+      default:
+        break;
+    }
+  };
 }
 
 // TODO take puzzle param
 const displayCube = () => {
   document.write(PYRA_SVG);
 
-  const puzzle = document.getElementById('puzzle');
-  Array.from(puzzle.children).forEach(element => {
-    const [type, position, orientation] = element.id.split('-');
-    if (type === 'CENTERS') {
+  const puzzle = document.getElementById("puzzle");
+  Array.from(puzzle.children).forEach((element) => {
+    const [type, position, orientation] = element.id.split("-");
+    if (type === "CENTERS") {
       return;
     }
     const facelet = new Facelet(element.id, type, orientation);
@@ -310,4 +315,4 @@ const displayCube = () => {
     };
     element.onclick = () => facelet.click();
   });
-}
+};
