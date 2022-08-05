@@ -2,127 +2,7 @@
 <head>
 <script type="text/javascript" src="inc/gacube2.js"></script>
 <link href="inc/style.css" rel="stylesheet" media="screen" type="text/css" />
-<script>
 
-var worker;
-var startTime = null;
-
-
-function pad(n, minLength) {
-  var str = '' + n;
-  while (str.length < minLength) {
-    str = '0' + str;
-  }
-  return str;
-}
-function prettyTime(endTime) {
-  var now = new Date().getTime();
-  var cumulative = now - startTime;
-  var str = "";
-  str += Math.floor(cumulative/1000/60);
-  str += ":";
-  str += pad(Math.floor(cumulative/1000 % 60), 2);
-  str += ".";
-  str += pad(Math.floor((cumulative % 1000) / 10), 2);
-  return str;
-}
-
-// From alg.garron.us
-function escapealg(algstr){return algstr.replace(/\n/g, '%0A').replace(/-/g, '%2D').replace(/\'/g, '-').replace(/ /g, '_');}
-
-var go = function() {
-
-  worker = new Worker('ACube-worker.js');
-
-  worker.addEventListener('message', function(e) {
-
-    console.log(e.data);
-
-    var textarea = document.getElementById("result");
-    var timePrefix = "";
-    if (startTime != null) {
-      timePrefix = "[" + prettyTime() + "] ";
-    }
-    textarea.innerHTML += timePrefix + e.data + "\n";
-
-    var match = e.data.match(/([^\(]*) \(([^\)]*q[^\)]*f[^\)]*s)\)/)
-    if (match != null) {
-      var el = document.createElement("li");
-
-      var alg = escapealg(match[1] + " // " + match[2]);
-
-      el.innerHTML = "<a href=\"http://alg.garron.us/?alg=" + alg + "&animtype=solve\">" + match[1] + "</a> (" + match[2] + ")";
-      document.getElementById("algs").appendChild(el);
-    }
-
-    textarea.scrollTop = textarea.scrollHeight;
-  }, false);
-
-  set_all_opts();
-}
-
-function solve(str) {
-  startTime = new Date().getTime();
-  worker.postMessage(["solve", str]); // Send data to our worker.
-}
-
-function set_opts(str) {
-  worker.postMessage(["set_opts", str]); // Send data to our worker.
-}
-
-function set_slice() {
-  if (document.getElementById("slice").checked) {
-    set_opts("c");
-  }
-  else{
-    set_opts("d");
-  }
-}
-
-function set_all() {
-  if (document.getElementById("all").checked) {
-    set_opts("a");
-  }
-  else{
-    set_opts("d");
-  }
-}
-
-function set_optimal() {
-  if (document.getElementById("optimal").checked) {
-    set_opts("o");
-  }
-  else{
-    set_opts("p");
-  }
-}
-
-function set_metric(str) {
-  
-  var metrics = document.getElementsByName("metric");
-  for (i in metrics) {
-    if (metrics[i].checked) {
-        set_opts(metrics[i].value);
-    }
-  }
-}
-
-function set_all_opts() {
-  set_slice();
-  set_all();
-  set_optimal();
-  set_metric();
-}
-
-function stop() {
-  startTime = null;
-  worker.terminate();
-  go();
-}
-
-window.onload = go;
-
-</script>
 
 </head>
 <body>
@@ -146,9 +26,7 @@ Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.
 <p>Graphical frontend source: Ryan Heise, <a href="http://www.ryanheise.com/cube/gacube.html">ryanheise.com</a></p>
 
 <table style="background: black; margin: 0 20px; width: calc(100% - 40px);">
-<tbody><tr><td align="center">
-<script type="text/javascript">displayCube();</script>
-
+<tbody><tr><td align="center" id="puzzle">
 <tr><td align="center">
 <div style="background: #eee; color: black; font-size: 12px;">
 <input type="radio" name="mode" onclick="mode=SWAP;" checked="">Swap
@@ -159,48 +37,20 @@ Source is available <a href="https://github.com/lgarron/acube/tree/master/ACube.
 </td></tr>
 
 <tr><td>
-<div id="acubeDiv" style="background: yellow; color: black; font-size: 12px;">UF UR UB UL DF DR DB DL FR FL BR BL UFR URB UBL ULF DRF DFL DLB DBR</div>
 </td></tr>
 </tbody></table>
 
-<!-- <script type="text/javascript">updateAll();</script> -->
     </div>
     <div class="right">
 
-<input id="pos" style="width: 100%" value="UF FD FR UL BL DR DB BU LD FL BR RU  FLD FRD FUR LFU BDL BLU BRU RDB"><br>
+<p style="font-weight: bold; font-size: 24px; margin: 10px 0">SVG Input</p>
 
-<div style="padding: 5px;">
 
-<a href="ACube.txt">Advanced Instructions</a>
-
-<input id="slice" type="checkbox" onclick='set_slice();'>
-<label for="slice">Slices</label>
-
-<input id="all" type="checkbox" onclick='set_all();'>
-<label for="all">All</label>
-
-<input id="optimal" type="checkbox" onclick='set_optimal();'>
-<label for="optimal">Optimal</label>
-
-<input type="radio" name="metric" id="f" value="f" onclick="set_metric()" checked="true"  >
-<label for="f">FTM</label>
-<input type="radio" name="metric" id="q" value="q" onclick="set_metric()">
-<label for="q">QTM</label>
-<input type="radio" name="metric" id="s" value="s" onclick="set_metric()">
-<label for="s">STM</label>
-
-</div>
-
-<button onclick='solve(acubeDiv.innerHTML);'>Solve graphical input!</button>
-<button onclick='solve(pos.value);'>Solve text box input!</button>
-<button onclick='stop();'>Stop</button>
-
-<br>
-<textarea style="width: 100%; height: 50%; font-family: monospace;" id="result">Output will go here.
+<textarea style="width: 100%; height: 50%; font-family: monospace;" id="svgInput">Paste 2D KPuzzle SVG here
 </textarea>
-<ul id="algs">
-</ul>
 
+<button onclick="updateCube()">Use SVG</button>
 </div>
+<script type="text/javascript">initCube();</script>
 </body>
 </html>

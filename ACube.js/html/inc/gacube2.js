@@ -1,188 +1,86 @@
-const PYRA_SVG = `
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
-       "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="-20 -20 546 480" preserveAspectRatio="xMidYMid meet">
-  <defs>
-  </defs>
-  <title>pyraminx</title>
-  <defs>
-    <g id="stickerA" transform="scale(1, 0.577350269)">
-      <path
-         d="m 0,1.732050808 1,-1.732050808 1,1.732050808 z"
-         stroke="black" stroke-width="0.04px" stroke-linecap="butt" stroke-linejoin="round"
-      />
-    </g>
-    <g id="stickerV" transform="scale(1, 0.577350269)">
-      <path
-         d="m 0,0 1,1.732050808 1,-1.732050808 z"
-         stroke="black" stroke-width="0.04px" stroke-linecap="butt" stroke-linejoin="round"
-      />
-    </g>
-  </defs>
-<!--        0 1 2 3 4 5 6 7 8 9 10   -->
-<!--        | | | | | | | | | | |    -->
-<!--    0 - L L L L L F R R R R R    -->
-<!--    1 -   L L L F F F R R R      -->
-<!--    2 -     L F F F F F R        -->
-<!--    3 -       D D D D D          -->
-<!--    4 -         D D D            -->
-<!--    5 -           D              -->
-  <g id="puzzle" transform="translate(5, 5) scale(40, 69.28203232)">
-    <!-- CORNERS -->
-    <use id="CORNERS-l0-o0" xlink:href="#stickerV" transform="translate(5.2, 1.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS-l0-o1" xlink:href="#stickerA" transform="translate(3, 0)" style="fill: red"/>
-    <use id="CORNERS-l0-o2" xlink:href="#stickerA" transform="translate(7.4, 0)" style="fill: blue"/>
-    <use id="CORNERS-l3-o0" xlink:href="#stickerA" transform="translate(4.2, 3.2)" style="fill: yellow"/>
-    <use id="CORNERS-l3-o1" xlink:href="#stickerA" transform="translate(2, 1)" style="fill: red"/>
-    <use id="CORNERS-l3-o2" xlink:href="#stickerV" transform="translate(4.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS-l2-o0" xlink:href="#stickerA" transform="translate(6.2, 3.2)" style="fill: yellow"/>
-    <use id="CORNERS-l2-o1" xlink:href="#stickerV" transform="translate(6.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS-l2-o2" xlink:href="#stickerA" transform="translate(8.4, 1)" style="fill: blue"/>
-    <use id="CORNERS-l1-o1" xlink:href="#stickerA" transform="translate(9.4, 0)" style="fill: blue"/>
-    <use id="CORNERS-l1-o2" xlink:href="#stickerA" transform="translate(1, 0)" style="fill: red"/>
-    <use id="CORNERS-l1-o0" xlink:href="#stickerA" transform="translate(5.2, 4.2)" style="fill: yellow"/>
-    <!-- "TIPS" -->
-    <!-- CORNERS2 -->
-    <use id="CORNERS2-l0-o0" xlink:href="#stickerA" transform="translate(5.2, 0.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS2-l0-o1" xlink:href="#stickerV" transform="translate(4, 0)" style="fill: red"/>
-    <use id="CORNERS2-l0-o2" xlink:href="#stickerV" transform="translate(6.4, 0)" style="fill: blue"/>
-    <use id="CORNERS2-l3-o0" xlink:href="#stickerV" transform="translate(3.2, 3.2)" style="fill: yellow"/>
-    <use id="CORNERS2-l3-o1" xlink:href="#stickerV" transform="translate(2, 2)" style="fill: red"/>
-    <use id="CORNERS2-l3-o2" xlink:href="#stickerA" transform="translate(3.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS2-l2-o0" xlink:href="#stickerV" transform="translate(7.2, 3.2)" style="fill: yellow"/>
-    <use id="CORNERS2-l2-o1" xlink:href="#stickerA" transform="translate(7.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="CORNERS2-l2-o2" xlink:href="#stickerV" transform="translate(8.4, 2)" style="fill: blue"/>
-    <use id="CORNERS2-l1-o1" xlink:href="#stickerV" transform="translate(10.4,0)" style="fill: blue"/>
-    <use id="CORNERS2-l1-o2" xlink:href="#stickerV" transform="translate(0, 0)" style="fill: red"/>
-    <use id="CORNERS2-l1-o0" xlink:href="#stickerV" transform="translate(5.2, 5.2)" style="fill: yellow"/>
-    <!-- EDGES -->
-    <use id="EDGES-l0-o0" xlink:href="#stickerV" transform="translate(3, 1)" style="fill: red"/>
-    <use id="EDGES-l0-o1" xlink:href="#stickerA" transform="translate(4.2, 1.066666667)" style="fill: limegreen"/>
-    <use id="EDGES-l5-o0" xlink:href="#stickerA" transform="translate(6.2, 1.066666667)" style="fill: limegreen"/>
-    <use id="EDGES-l5-o1" xlink:href="#stickerV" transform="translate(7.4, 1)" style="fill: blue"/>
-    <use id="EDGES-l1-o0" xlink:href="#stickerV" transform="translate(8.4, 0)" style="fill: blue"/>
-    <use id="EDGES-l1-o1" xlink:href="#stickerV" transform="translate(2, 0)" style="fill: red"/>
-    <use id="EDGES-l2-o0" xlink:href="#stickerV" transform="translate(5.2, 3.2)" style="fill: yellow"/>
-    <use id="EDGES-l2-o1" xlink:href="#stickerA" transform="translate(5.2, 2.066666667)" style="fill: limegreen"/>
-    <use id="EDGES-l3-o0" xlink:href="#stickerV" transform="translate(9.4, 1)" style="fill: blue"/>
-    <use id="EDGES-l3-o1" xlink:href="#stickerV" transform="translate(6.2, 4.2)" style="fill: yellow"/>
-    <use id="EDGES-l4-o0" xlink:href="#stickerV" transform="translate(4.2, 4.2)" style="fill: yellow"/>
-    <use id="EDGES-l4-o1" xlink:href="#stickerV" transform="translate(1, 1)" style="fill: red"/>
-  </g>
-</svg>
-`;
-
 const SVG = `
-	<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
-       "http://www.w3.org/TR/2001/REC-SVG-20050904/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 518 392" preserveAspectRatio="xMidYMid meet">
-  <title>3x3x3</title>
-  <defs>
-    <g id="sticker">
-        <rect x="0" y="0" width="1" height="1" stroke="black" stroke-width="0.04px" />
-    </g>
-  </defs>
-
-<!--        0 1 2 3 4 5 6 7 8 9 10 11  -->
-<!--        | | | | | | | | | | | |<-  -->
-<!--    0 -       . . .                -->
-<!--    1 -       . . .                -->
-<!--    2 -       . . .                -->
-<!--    3 - . . . . . . . . . . . .    -->
-<!--    4 - . . . . . . . . . . . .    -->
-<!--    5 - . . . . . . . . . . . .    -->
-<!--    6 -       . . .                -->
-<!--    7 -       . . .                -->
-<!--    8 -       . . .                -->
-
-  <g id="puzzle" transform="translate(5,5) scale(40)">
-    <!-- CORNERS -->
-    <use id="CORNERS-l0-o0" xlink:href="#sticker" transform="translate(5.3,2.1)" style="fill: white"/>
-    <use id="CORNERS-l0-o1" xlink:href="#sticker" transform="translate(6.5,3.3)" style="fill: red"/>
-    <use id="CORNERS-l0-o2" xlink:href="#sticker" transform="translate(5.3,3.3)" style="fill: limegreen"/>
-
-    <use id="CORNERS-l1-o0" xlink:href="#sticker" transform="translate(5.3,0.1)" style="fill: white"/>
-    <use id="CORNERS-l1-o1" xlink:href="#sticker" transform="translate(9.7,3.3)" style="fill: #26f"/>
-    <use id="CORNERS-l1-o2" xlink:href="#sticker" transform="translate(8.5,3.3)" style="fill: red"/>
-
-    <use id="CORNERS-l2-o0" xlink:href="#sticker" transform="translate(3.3,0.1)" style="fill: white"/>
-    <use id="CORNERS-l2-o1" xlink:href="#sticker" transform="translate(0.1,3.3)" style="fill: orange"/>
-    <use id="CORNERS-l2-o2" xlink:href="#sticker" transform="translate(11.7,3.3)" style="fill: #26f"/>
-
-    <use id="CORNERS-l3-o0" xlink:href="#sticker" transform="translate(3.3,2.1)" style="fill: white"/>
-    <use id="CORNERS-l3-o1" xlink:href="#sticker" transform="translate(3.3,3.3)" style="fill: limegreen"/>
-    <use id="CORNERS-l3-o2" xlink:href="#sticker" transform="translate(2.1,3.3)" style="fill: orange"/>
-
-    <use id="CORNERS-l4-o0" xlink:href="#sticker" transform="translate(5.3,6.5)" style="fill: yellow"/>
-    <use id="CORNERS-l4-o1" xlink:href="#sticker" transform="translate(5.3,5.3)" style="fill: limegreen"/>
-    <use id="CORNERS-l4-o2" xlink:href="#sticker" transform="translate(6.5,5.3)" style="fill: red"/>
-
-    <use id="CORNERS-l5-o0" xlink:href="#sticker" transform="translate(3.3,6.5)" style="fill: yellow"/>
-    <use id="CORNERS-l5-o1" xlink:href="#sticker" transform="translate(2.1,5.3)" style="fill: orange"/>
-    <use id="CORNERS-l5-o2" xlink:href="#sticker" transform="translate(3.3,5.3)" style="fill: limegreen"/>
-
-    <use id="CORNERS-l6-o0" xlink:href="#sticker" transform="translate(3.3,8.5)" style="fill: yellow"/>
-    <use id="CORNERS-l6-o1" xlink:href="#sticker" transform="translate(11.7,5.3)" style="fill: #26f"/>
-    <use id="CORNERS-l6-o2" xlink:href="#sticker" transform="translate(0.1,5.3)"  style="fill: orange"/>
-
-    <use id="CORNERS-l7-o0" xlink:href="#sticker" transform="translate(5.3,8.5)" style="fill: yellow"/>
-    <use id="CORNERS-l7-o1" xlink:href="#sticker" transform="translate(8.5,5.3)" style="fill: red"/>
-    <use id="CORNERS-l7-o2" xlink:href="#sticker" transform="translate(9.7,5.3)" style="fill: #26f"/>
-
-    <!-- EDGES -->
-    <use id="EDGES-l0-o0"  xlink:href="#sticker" transform="translate(4.3,2.1)" style="fill: white"/>
-    <use id="EDGES-l0-o1"  xlink:href="#sticker" transform="translate(4.3,3.3)" style="fill: limegreen"/>
-
-    <use id="EDGES-l1-o0"  xlink:href="#sticker" transform="translate(5.3,1.1)" style="fill: white"/>
-    <use id="EDGES-l1-o1"  xlink:href="#sticker" transform="translate(7.5,3.3)" style="fill: red"/>
-
-    <use id="EDGES-l2-o0"  xlink:href="#sticker" transform="translate(4.3,0.1)" style="fill: white"/>
-    <use id="EDGES-l2-o1"  xlink:href="#sticker" transform="translate(10.7,3.3)" style="fill: #26f"/>
-
-    <use id="EDGES-l3-o0"  xlink:href="#sticker" transform="translate(3.3,1.1)" style="fill: white"/>
-    <use id="EDGES-l3-o1"  xlink:href="#sticker" transform="translate(1.1,3.3)" style="fill: orange"/>
-
-    <use id="EDGES-l4-o0"  xlink:href="#sticker" transform="translate(4.3,6.5)" style="fill: yellow"/>
-    <use id="EDGES-l4-o1"  xlink:href="#sticker" transform="translate(4.3,5.3)" style="fill: limegreen"/>
-
-    <use id="EDGES-l5-o0" xlink:href="#sticker" transform="translate(5.3,7.5)" style="fill: yellow"/>
-    <use id="EDGES-l5-o1" xlink:href="#sticker" transform="translate(7.5,5.3)" style="fill: red"/>
-
-    <use id="EDGES-l6-o0" xlink:href="#sticker" transform="translate(4.3,8.5)" style="fill: yellow"/>
-    <use id="EDGES-l6-o1" xlink:href="#sticker" transform="translate(10.7,5.3)" style="fill: #26f"/>
-
-    <use id="EDGES-l7-o0"  xlink:href="#sticker" transform="translate(3.3,7.5)" style="fill: yellow"/>
-    <use id="EDGES-l7-o1"  xlink:href="#sticker" transform="translate(1.1,5.3)" style="fill: orange"/>
-
-    <use id="EDGES-l8-o0"  xlink:href="#sticker" transform="translate(5.3,4.3)" style="fill: limegreen"/>
-    <use id="EDGES-l8-o1"  xlink:href="#sticker" transform="translate(6.5,4.3)" style="fill: red"/>
-
-    <use id="EDGES-l9-o0"  xlink:href="#sticker" transform="translate(3.3,4.3)" style="fill: limegreen"/>
-    <use id="EDGES-l9-o1"  xlink:href="#sticker" transform="translate(2.1,4.3)" style="fill: orange"/>
-
-    <use id="EDGES-l10-o0" xlink:href="#sticker" transform="translate(9.7,4.3)" style="fill: #26f"/>
-    <use id="EDGES-l10-o1" xlink:href="#sticker" transform="translate(8.5,4.3)" style="fill: red"/>
-
-    <use id="EDGES-l11-o0" xlink:href="#sticker" transform="translate(11.7,4.3)" style="fill: #26f"/>
-    <use id="EDGES-l11-o1" xlink:href="#sticker" transform="translate(0.1,4.3)" style="fill: orange"/>
-
-    <!-- CENTERS -->
-    <!-- TODO: Allow the same sticker to be reused for multiple orientations -->
-    <use id="CENTERS-l0-o0" xlink:href="#sticker" transform="translate(4.3,1.1)" style="fill: white"/>
-    
-    <use id="CENTERS-l1-o0" xlink:href="#sticker" transform="translate(1.1,4.3)" style="fill: orange"/>
-
-    <use id="CENTERS-l2-o0" xlink:href="#sticker" transform="translate(4.3,4.3)" style="fill: limegreen"/>
-    
-    <use id="CENTERS-l3-o0" xlink:href="#sticker" transform="translate(7.5,4.3)" style="fill: red"/>
-    
-    <use id="CENTERS-l4-o0" xlink:href="#sticker" transform="translate(10.7,4.3)" style="fill: #26f"/>
-    
-    <use id="CENTERS-l5-o0" xlink:href="#sticker" transform="translate(4.3,7.5)" style="fill: yellow"/>
-  </g>
-</svg>`;
+<svg id="svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 500">
+<style type="text/css"><![CDATA[.sticker { stroke: #000000; stroke-width: 1px; }]]></style>
+<g><title>F</title>
+<polygon id="CORNERS-l4-o1" class="sticker" style="fill: #00ff00" points="393.59999999999997 323.6 344.5333333333333 323.6 344.5333333333333 274.5333333333333 393.59999999999997 274.5333333333333"/>
+<polygon id="EDGES-l8-o0" class="sticker" style="fill: #00ff00" points="344.5333333333333 274.5333333333333 344.5333333333333 225.4666666666667 393.59999999999997 225.4666666666667 393.59999999999997 274.5333333333333"/>
+<polygon id="EDGES-l4-o1" class="sticker" style="fill: #00ff00" points="295.4666666666667 274.5333333333333 344.5333333333333 274.5333333333333 344.5333333333333 323.6 295.4666666666667 323.6"/>
+<polygon id="CENTERS-l2-o0" class="sticker" style="fill: #00ff00" points="344.5333333333333 225.4666666666667 344.5333333333333 274.5333333333333 295.4666666666667 274.5333333333333 295.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l2-o1" class="sticker" style="fill: #00ff00" points="344.5333333333333 225.4666666666667 344.5333333333333 274.5333333333333 295.4666666666667 274.5333333333333 295.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l2-o2" class="sticker" style="fill: #00ff00" points="344.5333333333333 225.4666666666667 344.5333333333333 274.5333333333333 295.4666666666667 274.5333333333333 295.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l2-o3" class="sticker" style="fill: #00ff00" points="344.5333333333333 225.4666666666667 344.5333333333333 274.5333333333333 295.4666666666667 274.5333333333333 295.4666666666667 225.4666666666667"/>
+<polygon id="EDGES-l9-o0" class="sticker" style="fill: #00ff00" points="295.4666666666667 225.4666666666667 295.4666666666667 274.5333333333333 246.39999999999998 274.5333333333333 246.39999999999998 225.4666666666667"/>
+<polygon id="CORNERS-l5-o2" class="sticker" style="fill: #00ff00" points="246.39999999999998 323.6 246.39999999999998 274.5333333333333 295.4666666666667 274.5333333333333 295.4666666666667 323.6"/>
+<polygon id="CORNERS-l3-o1" class="sticker" style="fill: #00ff00" points="246.39999999999998 176.39999999999998 295.4666666666667 176.39999999999998 295.4666666666667 225.4666666666667 246.39999999999998 225.4666666666667"/>
+<polygon id="EDGES-l0-o1" class="sticker" style="fill: #00ff00" points="344.5333333333333 225.4666666666667 295.4666666666667 225.4666666666667 295.4666666666667 176.39999999999998 344.5333333333333 176.39999999999998"/>
+<polygon id="CORNERS-l0-o2" class="sticker" style="fill: #00ff00" points="393.6 176.39999999999998 393.6 225.4666666666667 344.5333333333333 225.4666666666667 344.5333333333333 176.39999999999998"/>
+</g><g><title>D</title>
+<polygon id="CORNERS-l7-o0" class="sticker" style="fill: #ffff00" points="393.59999999999997 483.6 344.5333333333333 483.6 344.5333333333333 434.5333333333333 393.59999999999997 434.5333333333333"/>
+<polygon id="EDGES-l5-o0" class="sticker" style="fill: #ffff00" points="344.5333333333333 434.5333333333333 344.5333333333333 385.4666666666667 393.59999999999997 385.4666666666667 393.59999999999997 434.5333333333333"/>
+<polygon id="EDGES-l6-o0" class="sticker" style="fill: #ffff00" points="295.4666666666667 434.5333333333333 344.5333333333333 434.5333333333333 344.5333333333333 483.6 295.4666666666667 483.6"/>
+<polygon id="CENTERS-l5-o0" class="sticker" style="fill: #ffff00" points="344.5333333333333 385.4666666666667 344.5333333333333 434.5333333333333 295.4666666666667 434.5333333333333 295.4666666666667 385.4666666666667"/>
+<polygon id="CENTERS-l5-o1" class="sticker" style="fill: #ffff00" points="344.5333333333333 385.4666666666667 344.5333333333333 434.5333333333333 295.4666666666667 434.5333333333333 295.4666666666667 385.4666666666667"/>
+<polygon id="CENTERS-l5-o2" class="sticker" style="fill: #ffff00" points="344.5333333333333 385.4666666666667 344.5333333333333 434.5333333333333 295.4666666666667 434.5333333333333 295.4666666666667 385.4666666666667"/>
+<polygon id="CENTERS-l5-o3" class="sticker" style="fill: #ffff00" points="344.5333333333333 385.4666666666667 344.5333333333333 434.5333333333333 295.4666666666667 434.5333333333333 295.4666666666667 385.4666666666667"/>
+<polygon id="EDGES-l7-o0" class="sticker" style="fill: #ffff00" points="295.4666666666667 385.4666666666667 295.4666666666667 434.5333333333333 246.39999999999998 434.5333333333333 246.39999999999998 385.4666666666667"/>
+<polygon id="CORNERS-l6-o0" class="sticker" style="fill: #ffff00" points="246.39999999999998 483.6 246.39999999999998 434.5333333333333 295.4666666666667 434.5333333333333 295.4666666666667 483.6"/>
+<polygon id="CORNERS-l5-o0" class="sticker" style="fill: #ffff00" points="246.39999999999998 336.4 295.4666666666667 336.4 295.4666666666667 385.4666666666667 246.39999999999998 385.4666666666667"/>
+<polygon id="EDGES-l4-o0" class="sticker" style="fill: #ffff00" points="344.5333333333333 385.4666666666667 295.4666666666667 385.4666666666667 295.4666666666667 336.4 344.5333333333333 336.4"/>
+<polygon id="CORNERS-l4-o0" class="sticker" style="fill: #ffff00" points="393.6 336.4 393.6 385.4666666666667 344.5333333333333 385.4666666666667 344.5333333333333 336.4"/>
+</g><g><title>L</title>
+<polygon id="CORNERS-l6-o2" class="sticker" style="fill: #ff8000" points="86.40000000000005 323.6 86.40000000000006 274.5333333333333 135.46666666666675 274.5333333333333 135.46666666666675 323.6"/>
+<polygon id="EDGES-l7-o1" class="sticker" style="fill: #ff8000" points="135.46666666666675 274.5333333333333 184.53333333333336 274.5333333333333 184.53333333333336 323.6 135.46666666666675 323.6"/>
+<polygon id="EDGES-l11-o1" class="sticker" style="fill: #ff8000" points="135.46666666666675 225.4666666666667 135.46666666666675 274.5333333333333 86.40000000000008 274.5333333333333 86.40000000000008 225.4666666666667"/>
+<polygon id="CENTERS-l1-o0" class="sticker" style="fill: #ff8000" points="184.53333333333336 225.4666666666667 184.53333333333336 274.5333333333333 135.46666666666675 274.5333333333333 135.46666666666675 225.4666666666667"/>
+<polygon id="CENTERS-l1-o1" class="sticker" style="fill: #ff8000" points="184.53333333333336 225.4666666666667 184.53333333333336 274.5333333333333 135.46666666666675 274.5333333333333 135.46666666666675 225.4666666666667"/>
+<polygon id="CENTERS-l1-o2" class="sticker" style="fill: #ff8000" points="184.53333333333336 225.4666666666667 184.53333333333336 274.5333333333333 135.46666666666675 274.5333333333333 135.46666666666675 225.4666666666667"/>
+<polygon id="CENTERS-l1-o3" class="sticker" style="fill: #ff8000" points="184.53333333333336 225.4666666666667 184.53333333333336 274.5333333333333 135.46666666666675 274.5333333333333 135.46666666666675 225.4666666666667"/>
+<polygon id="EDGES-l3-o1" class="sticker" style="fill: #ff8000" points="184.53333333333336 225.4666666666667 135.46666666666675 225.4666666666667 135.46666666666675 176.39999999999998 184.53333333333336 176.39999999999998"/>
+<polygon id="CORNERS-l2-o1" class="sticker" style="fill: #ff8000" points="86.40000000000008 176.39999999999998 135.46666666666675 176.39999999999998 135.46666666666675 225.4666666666667 86.40000000000008 225.4666666666667"/>
+<polygon id="CORNERS-l3-o2" class="sticker" style="fill: #ff8000" points="233.6000000000001 176.39999999999998 233.60000000000008 225.4666666666667 184.53333333333336 225.4666666666667 184.53333333333336 176.39999999999998"/>
+<polygon id="EDGES-l9-o1" class="sticker" style="fill: #ff8000" points="184.53333333333336 274.5333333333333 184.53333333333336 225.4666666666667 233.60000000000008 225.4666666666667 233.60000000000008 274.5333333333333"/>
+<polygon id="CORNERS-l5-o1" class="sticker" style="fill: #ff8000" points="233.60000000000005 323.6 184.53333333333336 323.6 184.53333333333336 274.5333333333333 233.60000000000008 274.5333333333333"/>
+</g><g><title>B</title>
+<polygon id="CORNERS-l1-o1" class="sticker" style="fill: #0000ff" points="566.4 176.4 615.4666666666667 176.4 615.4666666666667 225.46666666666673 566.4 225.46666666666673"/>
+<polygon id="EDGES-l10-o0" class="sticker" style="fill: #0000ff" points="615.4666666666667 225.46666666666673 615.4666666666667 274.5333333333333 566.4 274.5333333333333 566.4 225.46666666666673"/>
+<polygon id="EDGES-l2-o1" class="sticker" style="fill: #0000ff" points="664.5333333333333 225.46666666666673 615.4666666666667 225.46666666666673 615.4666666666667 176.40000000000006 664.5333333333333 176.40000000000006"/>
+<polygon id="CENTERS-l4-o0" class="sticker" style="fill: #0000ff" points="664.5333333333333 225.46666666666673 664.5333333333333 274.5333333333333 615.4666666666667 274.5333333333333 615.4666666666667 225.46666666666673"/>
+<polygon id="CENTERS-l4-o1" class="sticker" style="fill: #0000ff" points="664.5333333333333 225.46666666666673 664.5333333333333 274.5333333333333 615.4666666666667 274.5333333333333 615.4666666666667 225.46666666666673"/>
+<polygon id="CENTERS-l4-o2" class="sticker" style="fill: #0000ff" points="664.5333333333333 225.46666666666673 664.5333333333333 274.5333333333333 615.4666666666667 274.5333333333333 615.4666666666667 225.46666666666673"/>
+<polygon id="CENTERS-l4-o3" class="sticker" style="fill: #0000ff" points="664.5333333333333 225.46666666666673 664.5333333333333 274.5333333333333 615.4666666666667 274.5333333333333 615.4666666666667 225.46666666666673"/>
+<polygon id="EDGES-l11-o0" class="sticker" style="fill: #0000ff" points="664.5333333333333 274.5333333333333 664.5333333333333 225.46666666666673 713.6 225.46666666666673 713.6 274.5333333333333"/>
+<polygon id="CORNERS-l2-o2" class="sticker" style="fill: #0000ff" points="713.6 176.40000000000006 713.6 225.46666666666673 664.5333333333333 225.46666666666673 664.5333333333333 176.40000000000006"/>
+<polygon id="CORNERS-l6-o1" class="sticker" style="fill: #0000ff" points="713.6 323.6 664.5333333333333 323.6 664.5333333333333 274.5333333333333 713.6 274.5333333333333"/>
+<polygon id="EDGES-l6-o1" class="sticker" style="fill: #0000ff" points="615.4666666666667 274.5333333333333 664.5333333333333 274.5333333333333 664.5333333333333 323.6 615.4666666666667 323.6"/>
+<polygon id="CORNERS-l7-o2" class="sticker" style="fill: #0000ff" points="566.4 323.6 566.4 274.5333333333333 615.4666666666667 274.5333333333333 615.4666666666667 323.6"/>
+</g><g><title>U</title>
+<polygon id="CORNERS-l2-o0" class="sticker" style="fill: #ffffff" points="246.40000000000003 16.40000000000009 295.4666666666667 16.40000000000009 295.4666666666667 65.46666666666681 246.40000000000003 65.46666666666681"/>
+<polygon id="EDGES-l3-o0" class="sticker" style="fill: #ffffff" points="295.4666666666667 65.46666666666681 295.4666666666667 114.53333333333342 246.40000000000003 114.53333333333342 246.40000000000003 65.46666666666681"/>
+<polygon id="EDGES-l2-o0" class="sticker" style="fill: #ffffff" points="344.5333333333333 65.46666666666681 295.4666666666667 65.46666666666681 295.4666666666667 16.400000000000148 344.5333333333333 16.40000000000009"/>
+<polygon id="CENTERS-l0-o0" class="sticker" style="fill: #ffffff" points="344.5333333333333 65.46666666666681 344.5333333333333 114.53333333333342 295.4666666666667 114.53333333333342 295.4666666666667 65.46666666666681"/>
+<polygon id="CENTERS-l0-o1" class="sticker" style="fill: #ffffff" points="344.5333333333333 65.46666666666681 344.5333333333333 114.53333333333342 295.4666666666667 114.53333333333342 295.4666666666667 65.46666666666681"/>
+<polygon id="CENTERS-l0-o2" class="sticker" style="fill: #ffffff" points="344.5333333333333 65.46666666666681 344.5333333333333 114.53333333333342 295.4666666666667 114.53333333333342 295.4666666666667 65.46666666666681"/>
+<polygon id="CENTERS-l0-o3" class="sticker" style="fill: #ffffff" points="344.5333333333333 65.46666666666681 344.5333333333333 114.53333333333342 295.4666666666667 114.53333333333342 295.4666666666667 65.46666666666681"/>
+<polygon id="EDGES-l1-o0" class="sticker" style="fill: #ffffff" points="344.5333333333333 114.53333333333342 344.5333333333333 65.46666666666681 393.6 65.46666666666681 393.6 114.53333333333342"/>
+<polygon id="CORNERS-l1-o0" class="sticker" style="fill: #ffffff" points="393.6 16.40000000000009 393.6 65.46666666666681 344.5333333333333 65.46666666666681 344.5333333333333 16.40000000000009"/>
+<polygon id="CORNERS-l0-o0" class="sticker" style="fill: #ffffff" points="393.6 163.60000000000014 344.5333333333333 163.60000000000014 344.5333333333333 114.53333333333342 393.6 114.53333333333342"/>
+<polygon id="EDGES-l0-o0" class="sticker" style="fill: #ffffff" points="295.4666666666667 114.53333333333342 344.5333333333333 114.53333333333342 344.5333333333333 163.60000000000014 295.4666666666667 163.60000000000014"/>
+<polygon id="CORNERS-l3-o0" class="sticker" style="fill: #ffffff" points="246.39999999999998 163.60000000000014 246.39999999999998 114.53333333333342 295.4666666666667 114.53333333333342 295.4666666666667 163.60000000000014"/>
+</g><g><title>R</title>
+<polygon id="CORNERS-l1-o2" class="sticker" style="fill: #ff0000" points="553.6 176.40000000000003 553.6 225.4666666666667 504.5333333333333 225.4666666666667 504.5333333333333 176.40000000000003"/>
+<polygon id="EDGES-l1-o1" class="sticker" style="fill: #ff0000" points="504.5333333333333 225.4666666666667 455.4666666666667 225.4666666666667 455.4666666666667 176.40000000000003 504.5333333333333 176.40000000000003"/>
+<polygon id="EDGES-l10-o1" class="sticker" style="fill: #ff0000" points="504.5333333333333 274.5333333333333 504.5333333333333 225.4666666666667 553.6 225.4666666666667 553.6 274.5333333333333"/>
+<polygon id="CENTERS-l3-o0" class="sticker" style="fill: #ff0000" points="504.5333333333333 225.4666666666667 504.5333333333333 274.5333333333333 455.4666666666667 274.5333333333333 455.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l3-o1" class="sticker" style="fill: #ff0000" points="504.5333333333333 225.4666666666667 504.5333333333333 274.5333333333333 455.4666666666667 274.5333333333333 455.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l3-o2" class="sticker" style="fill: #ff0000" points="504.5333333333333 225.4666666666667 504.5333333333333 274.5333333333333 455.4666666666667 274.5333333333333 455.4666666666667 225.4666666666667"/>
+<polygon id="CENTERS-l3-o3" class="sticker" style="fill: #ff0000" points="504.5333333333333 225.4666666666667 504.5333333333333 274.5333333333333 455.4666666666667 274.5333333333333 455.4666666666667 225.4666666666667"/>
+<polygon id="EDGES-l5-o1" class="sticker" style="fill: #ff0000" points="455.4666666666667 274.5333333333333 504.5333333333333 274.5333333333333 504.5333333333333 323.6 455.4666666666667 323.6"/>
+<polygon id="CORNERS-l7-o1" class="sticker" style="fill: #ff0000" points="553.6 323.6 504.5333333333333 323.6 504.5333333333333 274.5333333333333 553.6 274.5333333333333"/>
+<polygon id="CORNERS-l4-o2" class="sticker" style="fill: #ff0000" points="406.4 323.6 406.4 274.5333333333333 455.4666666666667 274.5333333333333 455.4666666666667 323.6"/>
+<polygon id="EDGES-l8-o1" class="sticker" style="fill: #ff0000" points="455.4666666666667 225.4666666666667 455.4666666666667 274.5333333333333 406.4 274.5333333333333 406.4 225.4666666666667"/>
+<polygon id="CORNERS-l0-o1" class="sticker" style="fill: #ff0000" points="406.4 176.39999999999998 455.4666666666667 176.39999999999998 455.4666666666667 225.4666666666667 406.4 225.4666666666667"/>
+</g></svg>
+`;
 
 const reorder = function (arr, index) {
   const start = arr.slice(index);
@@ -269,6 +167,10 @@ function Facelet(id, type) {
   };
 
   this.select = function () {
+    if (cube.selectedFacelet) {
+      cube.selectedFacelet.deselect();
+    }
+
     cube.selectedFacelet = this;
     document.getElementById(id).style.opacity = 0.7;
   };
@@ -276,12 +178,10 @@ function Facelet(id, type) {
   this.click = function () {
     switch (mode) {
       case SWAP:
-        if (cube.selectedFacelet) {
-          if (cube.selectedFacelet.type == this.type) {
-            cube.swap(cube.selectedFacelet, this);
+        if (cube.selectedFacelet && cube.selectedFacelet.type == this.type) {
+          cube.swap(cube.selectedFacelet, this);
 
-            cube.selectedFacelet.deselect();
-          }
+          cube.selectedFacelet.deselect();
         } else {
           this.select();
         }
@@ -295,16 +195,15 @@ function Facelet(id, type) {
   };
 }
 
-// TODO take puzzle param
-const displayCube = () => {
-  document.write(PYRA_SVG);
+const setPuzzleContents = (content) => {
+  document.getElementById('puzzle').innerHTML = content;
+}
 
-  const puzzle = document.getElementById("puzzle");
-  Array.from(puzzle.children).forEach((element) => {
+const displayCube = () => {
+  const puzzle = document.querySelector('svg');
+  const facelets = puzzle.querySelectorAll('polygon');
+  facelets.forEach((element) => {
     const [type, position, orientation] = element.id.split("-");
-    if (type === "CENTERS") {
-      return;
-    }
     const facelet = new Facelet(element.id, type, orientation);
     if (!cube[type]) {
       cube[type] = {};
@@ -316,3 +215,16 @@ const displayCube = () => {
     element.onclick = () => facelet.click();
   });
 };
+
+const updateCube = () => {
+  const svg = document.getElementById('svgInput').value;
+  setPuzzleContents(svg);
+
+  displayCube();
+}
+
+const initCube = () => {
+  setPuzzleContents(SVG);
+  displayCube();
+}
+
