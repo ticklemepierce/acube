@@ -88,6 +88,8 @@ const reorder = function (arr, index) {
   return start.concat(end);
 };
 
+const getFaceletByOrientation = (piece, orientation) => piece[orientation];
+
 let SWAP = 0,
   TWIST = 1,
   IGNORE_POS = 2,
@@ -97,10 +99,7 @@ let mode = SWAP;
 function Cube() {
   this.selectedFacelet = null;
 
-  this.getPiece = (facelet) =>
-    Object.values(this[facelet.type]).find((value) =>
-      Object.values(value).find((val) => val === facelet)
-    );
+  this.getPieceByFacelet = ({position, type}) => this[type][position];
 
   this.swapFacelets = function (facelet1, facelet2) {
     const facelet1Elem = document.getElementById(facelet1.id);
@@ -112,54 +111,45 @@ function Cube() {
   };
 
   this.twist = function (facelet) {
-    const piece = this.getPiece(facelet);
+    const piece = this.getPieceByFacelet(facelet);
 
-    const pieceIdx = Object.values(piece)
-      .map((facelet) => facelet.id)
-      .indexOf(facelet.id);
+    const numSides = Object.values(piece).length;
 
-    const pieceFacelets = reorder(Object.values(piece), pieceIdx);
-
-    this.swapFacelets(pieceFacelets[0], pieceFacelets[1]);
-    this.swapFacelets(pieceFacelets[0], pieceFacelets[2]);
+    for (let i = 0; i < (numSides - 1); i++) {
+      const facelet = getFaceletByOrientation(piece, i);
+      const facelet2Orientation = (numSides + facelet.orientation + 1) % numSides;
+      this.swapFacelets(facelet, getFaceletByOrientation(piece, facelet2Orientation));
+    }
   };
 
   this.swap = function (facelet1, facelet2) {
-    const piece1 = this.getPiece(facelet1);
-    const piece2 = this.getPiece(facelet2);
+    const piece1 = this.getPieceByFacelet(facelet1);
+    const piece2 = this.getPieceByFacelet(facelet2);
 
     if (piece1 === piece2) {
       return;
     }
 
-    const piece1Idx = Object.values(piece1)
-      .map((facelet) => facelet.id)
-      .indexOf(facelet1.id);
-    const piece2Idx = Object.values(piece2)
-      .map((facelet) => facelet.id)
-      .indexOf(facelet2.id);
+    const offset = facelet2.orientation - facelet1.orientation;
+   
+    const numSides = Object.values(piece1).length;
 
-    const piece1Facelets = reorder(Object.values(piece1), piece1Idx);
-    const piece2Facelets = reorder(Object.values(piece2), piece2Idx);
+    for (let i = 0; i < (numSides); i++) {
+      const facelet = getFaceletByOrientation(piece1, i);
 
-    Object.values(piece1Facelets).forEach((facelet, idx) => {
-      this.swapFacelets(facelet, piece2Facelets[idx]);
-    });
+      const facelet2Orientation = (numSides + facelet.orientation + offset) % numSides;
+      this.swapFacelets(facelet, getFaceletByOrientation(piece2, facelet2Orientation));
+    }
   };
 }
 
 const cube = new Cube();
 
-window.getCubePieces = () => {
-  console.log("EDGES");
-  console.log(cube.EDGES);
-  console.log("CORNERS");
-  console.log(cube.CORNERS);
-};
-
-function Facelet(id, type) {
+function Facelet(id, type, position, orientation) {
   this.id = id;
   this.type = type;
+  this.orientation = parseInt(orientation);
+  this.position = parseInt(position);
 
   this.deselect = function () {
     cube.selectedFacelet = null;
@@ -204,7 +194,9 @@ const displayCube = () => {
   const facelets = puzzle.querySelectorAll('polygon');
   facelets.forEach((element) => {
     const [type, position, orientation] = element.id.split("-");
-    const facelet = new Facelet(element.id, type, orientation);
+    
+    // Strip prefixes from orientation and position
+    const facelet = new Facelet(element.id, type, position.substring(1), orientation.substring(1));
     if (!cube[type]) {
       cube[type] = {};
     }
