@@ -194,15 +194,18 @@ const displayCube = () => {
   const facelets = puzzle.querySelectorAll('polygon');
   facelets.forEach((element) => {
     const [type, position, orientation] = element.id.split("-");
+
+    const positionFormatted = position.substring(1);
+    const orientationFormatted = orientation.substring(1);
     
     // Strip prefixes from orientation and position
-    const facelet = new Facelet(element.id, type, position.substring(1), orientation.substring(1));
+    const facelet = new Facelet(element.id, type, positionFormatted, orientationFormatted);
     if (!cube[type]) {
       cube[type] = {};
     }
-    cube[type][position] = {
-      ...cube[type][position],
-      [orientation]: facelet,
+    cube[type][positionFormatted] = {
+      ...cube[type][positionFormatted],
+      [orientationFormatted]: facelet,
     };
     element.onclick = () => facelet.click();
   });
